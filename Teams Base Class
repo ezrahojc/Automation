@@ -1,0 +1,51 @@
+package automation1;
+
+import java.net.URL;
+
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeTest;
+
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.remote.MobileCapabilityType;
+
+public class BaseClassTeams {
+
+AndroidDriver<MobileElement> driver; 
+    
+    @BeforeTest
+    public void setup()
+    {
+        try {
+            DesiredCapabilities dCaps = new DesiredCapabilities();
+            
+            dCaps.setCapability(MobileCapabilityType.VERSION,"11");
+            dCaps.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel 4");
+            dCaps.setCapability(MobileCapabilityType.UDID, "99161FFAZ00HXU");
+            dCaps.setCapability(MobileCapabilityType.PLATFORM_NAME,"Android");
+            dCaps.setCapability("appPackage", "com.microsoft.teams");
+            dCaps.setCapability("appActivity", "com.microsoft.skype.teams.Launcher");
+                        
+            URL url = new URL("http://127.0.0.1:4723/wd/hub");
+            
+            driver = new AndroidDriver<MobileElement>(url,dCaps); //Appium Driver is like the parent 
+                                                                 //to Android and IOS Driver. However, 
+                                                                 //Android and IOS driver both have 
+                                                                 //extended functionality not present 
+                                                                 //in AppiumDriver.
+            
+            //driver = new AndroidDriver<MobileElement>(url,dCaps);
+            //driver = new IOSDriver<MobileElement>(url,dCaps);
+            
+        } catch(Exception exp) {
+            System.out.println("Cause is: "+exp.getCause());
+            System.out.println("Message is: "+exp.getMessage());
+            exp.printStackTrace();
+        }
+        
+        System.out.println("Completed BaseClass Test...");
+        
+    }
+}
