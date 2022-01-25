@@ -1,0 +1,141 @@
+package automation1;
+
+import static org.testng.Assert.assertTrue;
+
+import java.net.MalformedURLException;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.android.Activity;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
+
+import static io.appium.java_client.touch.offset.PointOption.point;
+import static java.time.Duration.ofMillis;
+import static java.time.Duration.ofSeconds;
+import static io.appium.java_client.touch.WaitOptions.waitOptions;
+
+import static io.appium.java_client.touch.TapOptions.tapOptions;
+import static io.appium.java_client.touch.WaitOptions.waitOptions;
+import static io.appium.java_client.touch.offset.ElementOption.element;
+import static io.appium.java_client.touch.offset.PointOption.point;
+import static java.time.Duration.ofMillis;
+import static java.time.Duration.ofSeconds;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.MultiTouchAction;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
+import org.openqa.selenium.Dimension;
+
+public class Teams extends BaseClassTeams{
+
+	@Test
+    public void openTeams() throws InterruptedException {
+        
+		// open Teams
+        // driver.startActivity(new Activity("com.microsoft.teams", "com.microsoft.skype.teams.Launcher"));
+        
+		try
+		{
+	        Thread.sleep(10*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+		}
+        
+        // enter email
+        MobileElement editEmail = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.widget.LinearLayout[2]/android.widget.EditText"));
+        editEmail.sendKeys("ezra.ho@v-key.com");
+        
+        // press sign in button
+        MobileElement signIn = driver.findElement(By.id("com.microsoft.teams:id/sign_in_button"));
+        signIn.click();
+        
+        System.out.println("Successfully logged into Teams...");
+    }
+    
+    @Test(dependsOnMethods="openTeams")
+    public void VOSlogin() throws InterruptedException {
+        
+    	try
+		{
+	        Thread.sleep(5*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+    	
+        // click to press credential to login
+        MobileElement credentialLogin = driver.findElement(By.xpath("//android.view.View[@content-desc=\"Credentials Login\"]/android.widget.TextView"));
+        credentialLogin.click();
+        
+        // click to enter username Demo4
+        MobileElement usernameDemo4 = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.RelativeLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View[3]/android.widget.EditText[1]"));
+        usernameDemo4.sendKeys("demo.user4@v-key.com");
+     		
+     	// click to enter auth pin
+     	MobileElement pw = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.RelativeLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View[3]/android.widget.EditText[2]"));
+     	pw.sendKeys("Vkey201940");
+        
+        // click to authenticate
+        MobileElement authbtn = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.view.ViewGroup/android.widget.FrameLayout[2]/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.RelativeLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View[3]/android.widget.Button"));
+        authbtn.click();
+        
+        try
+		{
+	        Thread.sleep(5*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+        
+        System.out.println("Logged into V-OS...");
+    }
+    
+    @Test(dependsOnMethods="VOSlogin")
+    public void VOSauth() throws InterruptedException {
+        
+        // launch V-Key App
+        driver.startActivity(new Activity("com.vkey.cloud.vkeyapp", "vkey.android.vtap.views.activities.LaunchActivity"));
+        
+        try
+		{
+	        Thread.sleep(7*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+        
+        // enter auth PIN for demo.user4 account
+        MobileElement authPIN2 = driver.findElement(By.id("com.vkey.cloud.vkeyapp:id/pin"));
+        authPIN2.sendKeys("123456");
+        
+        // click approve button to auth pin
+        MobileElement approvebtn = driver.findElement(By.id("com.vkey.cloud.vkeyapp:id/btn_positive"));
+        approvebtn.click();
+    }
+    
+    @Test(dependsOnMethods="VOSauth")
+    public void checkTeams() throws InterruptedException {
+        
+        // resume Chrome
+        driver.activateApp("com.microsoft.teams");
+    }
+    
+}
