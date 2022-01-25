@@ -1,0 +1,152 @@
+package automation1;
+
+import static org.testng.Assert.assertTrue;
+
+import java.net.MalformedURLException;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.android.Activity;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
+
+import static io.appium.java_client.touch.offset.PointOption.point;
+import static java.time.Duration.ofMillis;
+import static java.time.Duration.ofSeconds;
+import static io.appium.java_client.touch.WaitOptions.waitOptions;
+
+import static io.appium.java_client.touch.TapOptions.tapOptions;
+import static io.appium.java_client.touch.WaitOptions.waitOptions;
+import static io.appium.java_client.touch.offset.ElementOption.element;
+import static io.appium.java_client.touch.offset.PointOption.point;
+import static java.time.Duration.ofMillis;
+import static java.time.Duration.ofSeconds;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.MultiTouchAction;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
+import org.openqa.selenium.Dimension;
+
+public class Outlook extends BaseClass{
+
+	@Test
+	public void openOutlook() throws InterruptedException {
+		
+		// launch outlook
+		// driver.startActivity(new Activity("com.microsoft.office.outlook", "com.microsoft.office.outlook.MainActivity"));
+		
+		// click add account button
+		MobileElement addAccount = driver.findElement(By.id("com.microsoft.office.outlook:id/btn_primary_button"));
+		addAccount.click();
+		
+		// input email
+		MobileElement inputEmail = driver.findElement(By.id("com.microsoft.office.outlook:id/auto_complete_input_email"));
+		inputEmail.sendKeys("ezra.ho@v-key.com");
+		
+		// click continue
+		MobileElement continueButton = driver.findElement(By.id("com.microsoft.office.outlook:id/btn_primary_button"));
+		continueButton.click();
+		
+		try
+		{
+	        Thread.sleep(3*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+		
+		System.out.println("Successfully opened Outlook...");
+	}
+	
+	@Test(dependsOnMethods="openOutlook")
+	public void VOSlogin() throws InterruptedException {
+		
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		// click to press credential to login
+		MobileElement credentialLogin = driver.findElement(By.xpath("//android.view.View[@content-desc=\"Credentials Login\"]/android.widget.TextView"));
+		credentialLogin.click();
+		
+		// click to enter username Demo4
+		MobileElement usernameDemo4 = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.RelativeLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View[3]/android.widget.EditText[1]"));
+		usernameDemo4.sendKeys("demo.user4@v-key.com");
+		
+		// click to enter auth pin
+		MobileElement pw = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.RelativeLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View[3]/android.widget.EditText[2]"));
+		pw.sendKeys("Vkey201940");
+		
+		// click to authenticate
+		MobileElement submit_btn = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.RelativeLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View[3]/android.widget.Button"));
+		submit_btn.click();
+		
+		try
+		{
+	        Thread.sleep(10*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+				
+		System.out.println("Successfully entered credentials...");
+	}
+	
+	@Test(dependsOnMethods="VOSlogin")
+	public void VOSauth() throws InterruptedException {
+		
+		// launch V-Key App
+		driver.startActivity(new Activity("com.vkey.cloud.vkeyapp", "vkey.android.vtap.views.activities.LaunchActivity"));
+		
+		// enter auth PIN for demo.user4 account
+		MobileElement authPIN2 = driver.findElement(By.id("com.vkey.cloud.vkeyapp:id/pin"));
+		authPIN2.sendKeys("123456");
+		
+		// click approve button to auth pin
+		MobileElement approvebtn = driver.findElement(By.id("com.vkey.cloud.vkeyapp:id/btn_positive"));
+		approvebtn.click();
+		
+		try
+		{
+	        Thread.sleep(3*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+		
+		System.out.println("Successfully verified VOS...");
+	}
+	
+	@Test(dependsOnMethods="VOSlogin")
+	public void outlookAuth() throws InterruptedException {
+		
+		driver.activateApp("com.microsoft.office.outlook");
+		
+		// click activate
+		MobileElement activate_btn = driver.findElement(By.id("com.microsoft.office.outlook:id/positive_button"));
+		activate_btn.click();
+		
+		// click to activate device admin
+		MobileElement activate_device_admin = driver.findElement(By.id("com.android.settings:id/action_button"));
+		activate_device_admin.click();
+		
+		// skip adding another account
+		MobileElement skip_account = driver.findElement(By.id("com.microsoft.office.outlook:id/bottom_flow_navigation_start_button"));
+		skip_account.click();
+		
+		System.out.println("Successfully logged into Outlook...");
+	}
+	
+}
