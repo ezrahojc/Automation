@@ -1,0 +1,170 @@
+package automation1;
+
+import static org.testng.Assert.assertTrue;
+
+import java.net.MalformedURLException;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.android.Activity;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
+
+import static io.appium.java_client.touch.offset.PointOption.point;
+import static java.time.Duration.ofMillis;
+import static java.time.Duration.ofSeconds;
+import static io.appium.java_client.touch.WaitOptions.waitOptions;
+
+import static io.appium.java_client.touch.TapOptions.tapOptions;
+import static io.appium.java_client.touch.WaitOptions.waitOptions;
+import static io.appium.java_client.touch.offset.ElementOption.element;
+import static io.appium.java_client.touch.offset.PointOption.point;
+import static java.time.Duration.ofMillis;
+import static java.time.Duration.ofSeconds;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.MultiTouchAction;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
+import org.openqa.selenium.Dimension;
+
+public class SkypeForBusiness extends BaseClassSkype{
+
+	@Test
+	public void skypeforbuz() throws InterruptedException {
+		
+		// click next
+		MobileElement nextbtn = driver.findElement(By.id("com.microsoft.office.lync15:id/next"));
+		nextbtn.click();
+						
+		// click permissions for videos and mic
+		MobileElement agreements = driver.findElement(By.id("com.android.permissioncontroller:id/permission_allow_foreground_only_button"));
+		agreements.click();
+		agreements.click();
+		
+		// click permissions for access contact
+		MobileElement agreements2 = driver.findElement(By.id("com.android.permissioncontroller:id/permission_allow_button"));
+		agreements2.click();
+		agreements2.click();
+		agreements2.click();
+		
+		try
+		{
+	        Thread.sleep(3*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+		
+		// click permissions for videos and mic
+		MobileElement acceptTnC = driver.findElement(By.id("android:id/button1"));
+		acceptTnC.click();
+		
+		try
+		{
+	        Thread.sleep(2*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+		
+		// click permissions for videos and mic
+		MobileElement continueToSkype = driver.findElement(By.id("com.microsoft.office.lync15:id/PositiveButton"));
+		continueToSkype.click();
+		
+		System.out.println("Successfully opened Skype...");
+	}
+	
+	@Test(dependsOnMethods="skypeforbuz")
+	public void loginSkype() throws InterruptedException {
+		
+		// sign-in to Skype
+		MobileElement skypeSignin = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.ScrollView/android.widget.LinearLayout/android.widget.LinearLayout[2]/android.widget.EditText"));
+		skypeSignin.sendKeys("demo.user4@v-key.com");
+		
+		// sign-in to Skype
+		MobileElement skypeSigninbtn = driver.findElement(By.id("com.microsoft.office.lync15:id/CredentialsActivity_ButtonSignIn"));
+		skypeSigninbtn.click();
+		
+		try
+		{
+	        Thread.sleep(3*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+		
+		// click to press V-OS Credential to login
+		MobileElement credentialLogin = driver.findElement(By.xpath("//android.view.View[@content-desc=\"Credentials Login\"]/android.widget.TextView"));
+		credentialLogin.click();
+		
+		// enter password
+		MobileElement VOSPassword = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View[3]/android.widget.EditText[2]"));
+		VOSPassword.sendKeys("Vkey201940");
+		
+		// click to press sign in btn for VOS
+		MobileElement signinVOS = driver.findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[2]/android.view.View[3]/android.widget.Button"));
+		signinVOS.click();
+		
+		try
+		{
+	        Thread.sleep(3*1000);
+	    }
+		catch (InterruptedException e)
+		{
+	        e.printStackTrace();
+	    }
+		
+		System.out.println("Successfully signed into Skype...");
+		
+	}
+		
+	 @Test(dependsOnMethods="loginSkype")
+	    public void VOSauth() throws InterruptedException {
+	        
+	        // launch V-Key App
+	        driver.startActivity(new Activity("com.vkey.cloud.vkeyapp", "vkey.android.vtap.views.activities.LaunchActivity"));
+	        
+	        try
+			{
+		        Thread.sleep(7*1000);
+		    }
+			catch (InterruptedException e)
+			{
+		        e.printStackTrace();
+		    }
+	        
+	        // enter auth PIN for demo.user4 account
+	        MobileElement authPIN2 = driver.findElement(By.id("com.vkey.cloud.vkeyapp:id/pin"));
+	        authPIN2.sendKeys("123456");
+	        
+	        // click approve button to auth pin
+	        MobileElement approvebtn = driver.findElement(By.id("com.vkey.cloud.vkeyapp:id/btn_positive"));
+	        approvebtn.click();
+	        
+	        System.out.println("Successfully authenticated user...");
+	    }
+		
+	 @Test(dependsOnMethods="VOSauth")
+	    public void SkypeSignedIn() throws InterruptedException {
+	        
+		 	// resume Skype for Business
+	        driver.activateApp("com.microsoft.office.lync15");
+	        
+	        System.out.println("Successfully logged into Skype...");
+	    }
+	}
